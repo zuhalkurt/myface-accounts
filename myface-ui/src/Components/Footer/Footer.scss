@@ -1,0 +1,22 @@
+﻿@import "../../Styles/constants";
+
+
+.footer {
+  @include footerFont;
+  background-color: $color-primary;
+  padding: 0 $gutter-width;
+  display: flex;
+  justify-content: space-between;
+  
+  .link {
+    @include footerFont;
+    font-weight: bold;
+  }
+
+  .log-out-button {
+    @include footerFont;
+    font-weight: bold;
+    background: none;
+    border: none;
+  }
+}

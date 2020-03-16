@@ -1,0 +1,44 @@
+﻿@import "../../Styles/constants";
+
+.post-card {
+  position: relative;
+  
+  .image {
+    margin: -10px;
+    margin-bottom: 0;
+    width: calc(100% + 20px);
+    height: auto;
+    min-height: 60px;
+  }
+  
+  .message {
+    @include bodyFont;
+  }
+  
+  .user {
+    position: absolute;
+    box-shadow: 2px 2px 4px grey;
+    top: -20px;
+    right: -20px;
+    background-color: $color-background;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 60px;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    
+    &:hover, :focus {
+      width: 240px;
+    }
+  }
+  
+  .profile-image {
+    height: 60px;
+  }
+  
+  .user-name {
+    @include labelFont;
+    padding: 0 $spacing-medium;
+  }
+}

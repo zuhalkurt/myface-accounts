@@ -1,0 +1,29 @@
+﻿@import "../../Styles/constants";
+
+.login {
+  padding: $spacing-medium $gutter-width;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+  .title {
+    @include titleFont;
+    text-align: left;
+  }
+  
+  .login-form {
+    margin: $spacing-medium 0;
+  }
+  
+  .form-label {
+    @include formLabel;
+  }
+  
+  .form-input {
+    @include formInput;
+  }
+  
+  .submit-button {
+    @include primaryButton();
+  }
+}

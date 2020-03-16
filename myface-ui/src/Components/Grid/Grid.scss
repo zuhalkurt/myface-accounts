@@ -1,0 +1,10 @@
+﻿.grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: -10px;
+  
+  .list-item {
+    flex-grow: 1;
+  }
+}

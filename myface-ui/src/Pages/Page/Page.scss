@@ -1,0 +1,14 @@
+﻿@import "../../Styles/constants";
+
+$header-height: 56px;
+$nav-height: 48px;
+$footer-height: 34px;
+
+.page {
+  background-color: $color-background;
+  
+  .main {
+    box-sizing: border-box;
+    min-height: calc(100vh - #{$header-height} - #{$nav-height} - #{$footer-height});
+  }
+}

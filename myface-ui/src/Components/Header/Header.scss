@@ -1,0 +1,25 @@
+﻿@import "../../Styles/constants";
+
+.header {
+  background-color: $color-primary;
+  text-align: center;
+  
+  .home-link {
+    @include homeLinkFont();
+  }
+}
+
+.nav {
+  background-color: $color-primary-lighter;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  .nav-link {
+    @include navFont();
+    margin: 0 $spacing-small;
+  }
+}

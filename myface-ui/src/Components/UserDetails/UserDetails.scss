@@ -1,0 +1,42 @@
+﻿@import "../../Styles/constants";
+
+.user-details {
+  .cover-image {
+    width: 100%;
+  }
+  
+  .user-info {
+    margin: -34px $gutter-width $gutter-width;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+  }
+  
+  .profile-image {
+    height: 120px;
+    width: 120px;
+    background-color: $color-background-darker;
+  }
+  
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: $spacing-medium;
+    margin-top: 34px;
+  }
+  
+  .title {
+    @include titleFont;
+  }
+  
+  .username {
+    @include bodyFont;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  
+  .email {
+    @include bodyFont;
+    line-height: 1;
+  }
+}

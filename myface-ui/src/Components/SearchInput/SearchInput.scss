@@ -1,0 +1,11 @@
+﻿@import "../../Styles/constants";
+
+.search-form {
+  .form-label {
+     @include formLabel;
+  }
+  
+  .form-input {
+    @include formInput;
+  }
+}

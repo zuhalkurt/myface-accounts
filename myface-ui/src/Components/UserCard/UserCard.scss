@@ -1,0 +1,28 @@
+﻿@import "../../Styles/constants";
+
+.user-card {
+  display: flex;
+  flex-direction: row;
+  text-decoration: none;
+  
+  .profile-image {
+    height: 100px;
+    width: 100px;
+    margin: -10px;
+  }
+  
+  .user-details {
+    display: flex;
+    flex-direction: column;
+    padding-left: 30px;
+    justify-content: center;
+  }
+  
+  .name {
+    @include bodyFont;
+  }
+  
+  .username {
+    @include labelFont;
+  }
+}

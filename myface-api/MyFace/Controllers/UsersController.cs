@@ -17,7 +17,7 @@ namespace MyFace.Controllers
         }
         
         [HttpGet("")]
-        public ActionResult<UserListResponse> Search([FromQuery] SearchRequest searchRequest)
+        public ActionResult<UserListResponse> Search([FromQuery] UserSearchRequest searchRequest)
         {
             var users = _users.Search(searchRequest);
             var userCount = _users.Count(searchRequest);

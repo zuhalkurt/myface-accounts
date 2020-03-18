@@ -17,7 +17,7 @@ namespace MyFace.Controllers
         }
         
         [HttpGet("")]
-        public ActionResult<PostListResponse> Search([FromQuery] SearchRequest searchRequest)
+        public ActionResult<PostListResponse> Search([FromQuery] PostSearchRequest searchRequest)
         {
             var posts = _posts.Search(searchRequest);
             var postCount = _posts.Count(searchRequest);

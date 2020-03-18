@@ -9,9 +9,10 @@ namespace MyFace.Repositories
 {
     public interface IPostsRepo
     {
-        IEnumerable<Post> Search(SearchRequest search);
-        IEnumerable<Post> SearchFeed(SearchRequest search);
-        int Count(SearchRequest search);
+        IEnumerable<Post> Search(PostSearchRequest search);
+        IEnumerable<Post> SearchFeed(FeedSearchRequest search);
+        int Count(PostSearchRequest search);
+        int CountFeed(FeedSearchRequest searchRequest);
         Post GetById(int id);
         Post Create(CreatePostRequest post);
         Post Update(int id, UpdatePostRequest update);
@@ -27,30 +28,43 @@ namespace MyFace.Repositories
             _context = context;
         }
         
-        public IEnumerable<Post> Search(SearchRequest search)
+        public IEnumerable<Post> Search(PostSearchRequest search)
         {
             return _context.Posts
                 .OrderByDescending(p => p.PostedAt)
-                .Where(p => search.Search == null || p.Message.ToLower().Contains(search.Search))
+                .Where(p => search.PostedBy == null || p.UserId == search.PostedBy)
                 .Skip((search.Page - 1) * search.PageSize)
                 .Take(search.PageSize);
         }
         
-        public IEnumerable<Post> SearchFeed(SearchRequest search)
+        public IEnumerable<Post> SearchFeed(FeedSearchRequest search)
         {
             return _context.Posts
                 .OrderByDescending(p => p.PostedAt)
-                .Where(p => search.Search == null || p.Message.ToLower().Contains(search.Search))
+                .Where(p => search.PostedBy == null || p.UserId == search.PostedBy)
+                .Where(p => search.LikedBy == null || p.Interactions.Where(i => i.Type == InteractionType.LIKE).Any(i => i.UserId == search.LikedBy))
+                .Where(p => search.DislikedBy == null || p.Interactions.Where(i => i.Type == InteractionType.DISLIKE).Any(i => i.UserId == search.DislikedBy))
                 .Include(p => p.User)
                 .Include(p => p.Interactions).ThenInclude(i => i.User)
                 .Skip((search.Page - 1) * search.PageSize)
                 .Take(search.PageSize);
         }
 
-        public int Count(SearchRequest search)
+        public int Count(PostSearchRequest search)
         {
             return _context.Posts
-                .Count(p => search.Search == null || p.Message.Contains(search.Search));
+                .Count(p => search.PostedBy == null || p.UserId == search.PostedBy);
+        }
+
+        public int CountFeed(FeedSearchRequest search)
+        {
+            return _context.Posts
+                .Where(p => search.PostedBy == null || p.UserId == search.PostedBy)
+                .Where(p => search.LikedBy == null || p.Interactions.Where(i => i.Type == InteractionType.LIKE)
+                                .Any(i => i.UserId == search.LikedBy))
+                .Where(p => search.DislikedBy == null || p.Interactions.Where(i => i.Type == InteractionType.DISLIKE)
+                                .Any(i => i.UserId == search.DislikedBy))
+                .Count();
         }
 
         public Post GetById(int id)

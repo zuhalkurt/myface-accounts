@@ -8,8 +8,8 @@ namespace MyFace.Repositories
 {
     public interface IUsersRepo
     {
-        IEnumerable<User> Search(SearchRequest search);
-        int Count(SearchRequest search);
+        IEnumerable<User> Search(UserSearchRequest search);
+        int Count(UserSearchRequest search);
         User GetById(int id);
         User Create(CreateUserRequest newUser);
         User Update(int id, UpdateUserRequest update);
@@ -25,7 +25,7 @@ namespace MyFace.Repositories
             _context = context;
         }
         
-        public IEnumerable<User> Search(SearchRequest search)
+        public IEnumerable<User> Search(UserSearchRequest search)
         {
             return _context.Users
                 .Where(p => search.Search == null || 
@@ -40,7 +40,7 @@ namespace MyFace.Repositories
                 .Take(search.PageSize);
         }
 
-        public int Count(SearchRequest search)
+        public int Count(UserSearchRequest search)
         {
             return _context.Users
                 .Count(p => search.Search == null || 

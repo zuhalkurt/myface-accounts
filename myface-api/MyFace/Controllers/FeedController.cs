@@ -16,7 +16,7 @@ namespace MyFace.Controllers
         }
         
         [HttpGet("")]
-        public ActionResult<FeedModel> GetFeed([FromQuery] SearchRequest searchRequest)
+        public ActionResult<FeedModel> GetFeed([FromQuery] FeedSearchRequest searchRequest)
         {
             var posts = _posts.SearchFeed(searchRequest);
             var postCount = _posts.Count(searchRequest);

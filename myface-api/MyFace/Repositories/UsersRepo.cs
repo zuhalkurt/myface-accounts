@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using MyFace.Models.Database;
 using MyFace.Models.Request;
+using MyFace.Services;
 
 namespace MyFace.Repositories
 {
@@ -11,6 +12,7 @@ namespace MyFace.Repositories
         IEnumerable<User> Search(UserSearchRequest search);
         int Count(UserSearchRequest search);
         User GetById(int id);
+        User GetByUsername(string username);
         User Create(CreateUserRequest newUser);
         User Update(int id, UpdateUserRequest update);
         void Delete(int id);
@@ -19,10 +21,12 @@ namespace MyFace.Repositories
     public class UsersRepo : IUsersRepo
     {
         private readonly MyFaceDbContext _context;
+        private readonly IHashService _hashService;
 
-        public UsersRepo(MyFaceDbContext context)
+        public UsersRepo(MyFaceDbContext context, IHashService hashService)
         {
             _context = context;
+            _hashService = hashService;
         }
         
         public IEnumerable<User> Search(UserSearchRequest search)
@@ -58,8 +62,14 @@ namespace MyFace.Repositories
                 .Single(user => user.Id == id);
         }
 
+        public User GetByUsername(string username)
+        {
+            return _context.Users.SingleOrDefault(user => user.Username == username);
+        }
+
         public User Create(CreateUserRequest newUser)
         {
+            var salt = _hashService.GenerateSalt();
             var insertResponse = _context.Users.Add(new User
             {
                 FirstName = newUser.FirstName,
@@ -68,6 +78,8 @@ namespace MyFace.Repositories
                 Username = newUser.Username,
                 ProfileImageUrl = newUser.ProfileImageUrl,
                 CoverImageUrl = newUser.CoverImageUrl,
+                Salt = salt,
+                HashedPassword = _hashService.HashPassword(salt, newUser.Password)
             });
             _context.SaveChanges();
 

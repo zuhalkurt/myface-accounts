@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MyFace.Models.Database;
+using MyFace.Services;
 
 namespace MyFace.Data
 {
     public static class SampleUsers
     {
         public static int NumberOfUsers = 100;
+        private static HashService _hashService = new HashService();
         
         private static IList<IList<string>> _data = new List<IList<string>>
         {
@@ -119,12 +121,15 @@ namespace MyFace.Data
 
         private static User CreateRandomUser(int index)
         {
+            var salt = _hashService.GenerateSalt();
             return new User
             {
                 FirstName = _data[index][0],
                 LastName = _data[index][1],
                 Username = _data[index][2],
                 Email = _data[index][3],
+                Salt = salt,
+                HashedPassword = _hashService.HashPassword(salt, "super-secret-password"),
                 ProfileImageUrl = ImageGenerator.GetProfileImage(_data[index][2]),
                 CoverImageUrl = ImageGenerator.GetCoverImage(index),
             };

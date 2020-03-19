@@ -50,7 +50,10 @@ export async function fetchUser(userId: string | number): Promise<User> {
     return await response.json();
 }
 
-export async function fetchPosts(page: number, pageSize: number): Promise<ListResponse<Post>> {
+export async function fetchPosts(page: number, pageSize: number, username: string, password: string): Promise<ListResponse<Post>> {
+    // generate the Basic Auth Header;
+    console.log(username, password);
+    
     const response = await fetch(`https://localhost:5001/feed?page=${page}&pageSize=${pageSize}`);
     return await response.json();
 }

@@ -5,8 +5,9 @@ using MyFace.Repositories;
 
 namespace MyFace.Controllers
 {
+    [ApiController]
     [Route("feed")]
-    public class FeedController
+    public class FeedController : ControllerBase
     {
         private readonly IPostsRepo _posts;
 
@@ -14,7 +15,7 @@ namespace MyFace.Controllers
         {
             _posts = posts;
         }
-        
+
         [HttpGet("")]
         public ActionResult<FeedModel> GetFeed([FromQuery] FeedSearchRequest searchRequest)
         {

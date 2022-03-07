@@ -9,6 +9,7 @@ type FormStatus = "READY" | "SUBMITTING" | "ERROR" | "FINISHED"
 export function CreateUserForm(): JSX.Element {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [status, setStatus] = useState<FormStatus>("READY");
@@ -16,7 +17,7 @@ export function CreateUserForm(): JSX.Element {
     function submitForm(event: FormEvent) {
         event.preventDefault();
         setStatus("SUBMITTING");
-        createUser({firstName, lastName, email, password})
+        createUser({firstName, lastName, username, email, password})
             .then(() => setStatus("FINISHED"))
             .catch(() => setStatus("ERROR"));
     }
@@ -41,9 +42,15 @@ export function CreateUserForm(): JSX.Element {
             </label>
 
             <label className="form-label">
+                Username
+                <input className="form-input" value={username} onChange={event => setUsername(event.target.value)}/>
+            </label>
+
+            <label className="form-label">
                 Email
                 <input className="form-input" value={email} onChange={event => setEmail(event.target.value)}/>
             </label>
+
             <label className="form-label">
                 Password
                 <input className="form-input" value={password} onChange={event => setPassword(event.target.value)}/>

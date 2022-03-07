@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Collections.Generic;
 using System.Linq;
 using MyFace.Models.Database;
 
@@ -10,6 +13,8 @@ namespace MyFace.Data
 
         private static readonly IList<IList<string>> Data = new List<IList<string>>
         {
+
+
             new List<string> { "Kania", "Placido", "kplacido0", "kplacido0@qq.com" },
             new List<string> { "Scotty", "Gariff", "sgariff1", "sgariff1@biblegateway.com" },
             new List<string> { "Colly", "Burgiss", "cburgiss2", "cburgiss2@amazon.co.uk" },
@@ -119,12 +124,32 @@ namespace MyFace.Data
 
         private static User CreateRandomUser(int index)
         {
+            string everybodysPassword = "password123";
+
+                byte[] salt = new byte[128 / 8];
+                using (var rngCsp = new RNGCryptoServiceProvider())
+                  {
+                         rngCsp.GetNonZeroBytes(salt);
+                  }
+                    string saltString = Convert.ToBase64String(salt);
+
+            // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
+                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: everybodysPassword,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 100000,
+                numBytesRequested: 256 / 8));
+                
+
             return new User
             {
                 FirstName = Data[index][0],
                 LastName = Data[index][1],
                 Username = Data[index][2],
                 Email = Data[index][3],
+                HashedPassword = hashed,
+                Salt = saltString,
                 ProfileImageUrl = ImageGenerator.GetProfileImage(Data[index][2]),
                 CoverImageUrl = ImageGenerator.GetCoverImage(index),
             };

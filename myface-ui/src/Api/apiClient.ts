@@ -40,6 +40,13 @@ export interface NewPost {
     userId: number;
 }
 
+export interface NewUser {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password : string;
+}
+
 export async function fetchUsers(searchTerm: string, page: number, pageSize: number): Promise<ListResponse<User>> {
     const response = await fetch(`https://localhost:5001/users?search=${searchTerm}&page=${page}&pageSize=${pageSize}`);
     return await response.json();
@@ -77,6 +84,19 @@ export async function createPost(newPost: NewPost) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(newPost),
+    });
+    
+    if (!response.ok) {
+        throw new Error(await response.json())
+    }
+}
+export async function createUser(newUser: NewUser) {
+    const response = await fetch(`https://localhost:5001/users/create`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newUser),
     });
     
     if (!response.ok) {

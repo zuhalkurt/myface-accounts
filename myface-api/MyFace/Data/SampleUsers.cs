@@ -13,8 +13,6 @@ namespace MyFace.Data
 
         private static readonly IList<IList<string>> Data = new List<IList<string>>
         {
-
-
             new List<string> { "Kania", "Placido", "kplacido0", "kplacido0@qq.com" },
             new List<string> { "Scotty", "Gariff", "sgariff1", "sgariff1@biblegateway.com" },
             new List<string> { "Colly", "Burgiss", "cburgiss2", "cburgiss2@amazon.co.uk" },

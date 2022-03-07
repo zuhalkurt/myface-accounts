@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using MyFace.Models.Database;
 
 namespace MyFace.Helpers
 {
     public static class UrlHelper
     {
-        public static string CreateHashValue(HashResponse hashResponse)
+        public static string CreateHashValue(string password)
         {
                 byte[] salt = new byte[128 / 8];
                 using (var rngCsp = new RNGCryptoServiceProvider())
@@ -18,7 +17,7 @@ namespace MyFace.Helpers
 
             // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
                 string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: hashResponse.HashedPassword,
+                password: password,
                 salt: salt,
                 prf: KeyDerivationPrf.HMACSHA256,
                 iterationCount: 100000,

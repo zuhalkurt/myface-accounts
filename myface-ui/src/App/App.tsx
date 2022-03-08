@@ -9,6 +9,7 @@ import {LoginContext, LoginManager} from "../Components/LoginManager/LoginManage
 import {Profile} from "../Pages/Profile/Profile";
 import {CreatePost} from "../Pages/CreatePost/CreatePost";
 import { CreateUser } from '../Pages/CreateUser/CreateUser';
+import { PostList } from '../Components/PostList/PostList';
 
 
 function Routes(): ReactElement {
@@ -25,7 +26,7 @@ function Routes(): ReactElement {
             <Route exact path="/users/:id" component={Profile}/>
             <Route exact path="/new-post" component={CreatePost}/>
             <Route exact path="/new-user" component={CreateUser}/>
-            <Route exact path="login" component={Login}/>
+            <Route exact path="/login" component={Login}/>
             <Route path="" component={NotFound}/>
         </Switch>
     );

@@ -2,28 +2,31 @@
 using MyFace.Models.Request;
 using MyFace.Models.Response;
 using MyFace.Models.Database;
+using MyFace.Helpers;
 using MyFace.Repositories;
 using Microsoft.Extensions.Primitives;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
 using Microsoft.AspNetCore.Http;
-using MyFace.Helpers;
+using MyFace.Services;
 
 namespace MyFace.Controllers
 {
     [ApiController]
     [Route("/posts")]
     public class PostsController : ControllerBase
-    {    
+    {
+        private readonly IAuthService _authService;
         private readonly IPostsRepo _posts;
         private readonly IUsersRepo _users;
 
-        public PostsController(IPostsRepo posts, IUsersRepo users)
+        public PostsController(IAuthService authService, IPostsRepo posts, IUsersRepo users)
         {
+            _authService = authService;
             _posts = posts;
             _users = users;
         }
-        
+
         [HttpGet("")]
         public ActionResult<PostListResponse> Search([FromQuery] PostSearchRequest searchRequest)
         {
@@ -40,24 +43,37 @@ namespace MyFace.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult Create([FromBody] CreatePostRequest newPost,
-                                    [FromHeader])
+        public IActionResult Create(
+            [FromBody] CreatePostRequest newPost,
+            [FromHeader] string authorization
+        )
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            
-            var authHeader = Request.Headers["Authorization"];
 
-            bool  IsAuthenticate = PasswordHelper.AuthenticateUser(authHeader);
+            var authHeaderSplit = authorization.Split(' ');
+            var authType = authHeaderSplit[0];
+            var encodedUsernamePassword = authHeaderSplit[1];
 
-            if( IsAuthenticate == false)
+            var usernamePassword = System.Text.Encoding.UTF8.GetString(
+                Convert.FromBase64String(encodedUsernamePassword)
+            );
+
+            var usernamePasswordArray = usernamePassword.Split(':');
+
+            var username = usernamePasswordArray[0];
+            var password = usernamePasswordArray[1];
+
+            if (!_authService.IsValidUsernameAndPassword(username, password))
             {
-                return Unauthorized("The username/password combination does not match");
+                return Unauthorized("The username and password are not valid");
             }
 
-            if(user.Id != newPost.UserId)
+            User user = _users.GetByUsername(username);
+
+            if (user.Id != newPost.UserId)
             {
                 return StatusCode(
                     StatusCodes.Status403Forbidden,

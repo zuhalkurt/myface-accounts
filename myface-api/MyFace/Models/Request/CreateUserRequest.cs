@@ -23,8 +23,8 @@ namespace MyFace.Models.Request
         [Required]
         [StringLength(70, MinimumLength = 8)]
         public string Password { get; set; }
-
-        
+        public string HashedPassword { get; set; }
+        public string Salt{ get; set; }
         public string ProfileImageUrl { get; set; }
         
         public string CoverImageUrl { get; set; }

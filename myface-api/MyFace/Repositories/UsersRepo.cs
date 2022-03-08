@@ -1,7 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using MyFace.Models.Database;
 using MyFace.Models.Request;
+using MyFace.Helpers;
+
 
 
 namespace MyFace.Repositories
@@ -15,7 +20,7 @@ namespace MyFace.Repositories
         User Update(int id, UpdateUserRequest update);
         void Delete(int id);
     }
-    
+
     public class UsersRepo : IUsersRepo
     {
         private readonly MyFaceDbContext _context;
@@ -24,11 +29,11 @@ namespace MyFace.Repositories
         {
             _context = context;
         }
-        
+
         public IEnumerable<User> Search(UserSearchRequest search)
         {
             return _context.Users
-                .Where(p => search.Search == null || 
+                .Where(p => search.Search == null ||
                             (
                                 p.FirstName.ToLower().Contains(search.Search) ||
                                 p.LastName.ToLower().Contains(search.Search) ||
@@ -43,7 +48,7 @@ namespace MyFace.Repositories
         public int Count(UserSearchRequest search)
         {
             return _context.Users
-                .Count(p => search.Search == null || 
+                .Count(p => search.Search == null ||
                             (
                                 p.FirstName.ToLower().Contains(search.Search) ||
                                 p.LastName.ToLower().Contains(search.Search) ||
@@ -60,16 +65,15 @@ namespace MyFace.Repositories
 
         public User Create(CreateUserRequest newUser)
         {
-            
-           
-            
-
+            var salt = PasswordHelper.CreateSalt();
             var insertResponse = _context.Users.Add(new User
             {
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
                 Email = newUser.Email,
                 Username = newUser.Username,
+                HashedPassword  = PasswordHelper.CreateHashValue(newUser.Password, salt),
+                Salt  = Convert.ToBase64String(salt),
                 ProfileImageUrl = newUser.ProfileImageUrl,
                 CoverImageUrl = newUser.CoverImageUrl,
             });
@@ -86,6 +90,8 @@ namespace MyFace.Repositories
             user.LastName = update.LastName;
             user.Username = update.Username;
             user.Email = update.Email;
+            // user.HashedPassword  = "HashedPassword";
+            // user.Salt  = "Salt";
             user.ProfileImageUrl = update.ProfileImageUrl;
             user.CoverImageUrl = update.CoverImageUrl;
 

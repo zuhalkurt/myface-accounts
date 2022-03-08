@@ -40,7 +40,8 @@ namespace MyFace.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult Create([FromBody] CreatePostRequest newPost)
+        public IActionResult Create([FromBody] CreatePostRequest newPost,
+                                    [FromHeader])
         {
             if (!ModelState.IsValid)
             {
@@ -49,38 +50,9 @@ namespace MyFace.Controllers
             
             var authHeader = Request.Headers["Authorization"];
 
-            if(authHeader == StringValues.Empty)
-            {
-                return Unauthorized();
-            }
+            bool  IsAuthenticate = PasswordHelper.AuthenticateUser(authHeader);
 
-            var authHeaderString = authHeader[0];
-            var authHeaderSplit = authHeaderString.Split(' ');
-            var authType = authHeaderSplit[0];
-            var encodedUsernamePassword = authHeaderSplit[1];
-
-            var usernamePassword = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedUsernamePassword));
-
-            var usernamePasswordArray = usernamePassword.Split(':');
-
-            var username = usernamePasswordArray[0];
-            var password = usernamePasswordArray[1];
-
-            User user;
-
-            try
-            {
-                user = _users.GetByUsername(username);
-            }
-
-            catch (InvalidOperationException e)
-            {
-                return Unauthorized("The username/password combination does not match");
-            }
-
-            string hashed = PasswordHelper.CreateHashValue(password, Convert.FromBase64String(user.Salt));
-
-            if(hashed != user.HashedPassword)
+            if( IsAuthenticate == false)
             {
                 return Unauthorized("The username/password combination does not match");
             }

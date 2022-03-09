@@ -48,6 +48,11 @@ export interface NewUser {
     password : string;
 }
 
+function getAuthHeader(username: string, password: string)
+{
+    return `Basic ${btoa(`${username}:${password}`)}`;
+}
+
 export async function fetchUsers(searchTerm: string, page: number, pageSize: number): Promise<ListResponse<User>> {
     const response = await fetch(`https://localhost:5001/users?search=${searchTerm}&page=${page}&pageSize=${pageSize}`);
     return await response.json();
@@ -78,11 +83,12 @@ export async function fetchPostsDislikedBy(page: number, pageSize: number, userI
     return await response.json();
 }
 
-export async function createPost(newPost: NewPost) {
+export async function createPost(newPost: NewPost, username: string, password: string) {
     const response = await fetch(`https://localhost:5001/posts/create`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": getAuthHeader(username, password),
         },
         body: JSON.stringify(newPost),
     });

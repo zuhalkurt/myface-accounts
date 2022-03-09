@@ -19,15 +19,19 @@ function Routes(): ReactElement {
     }
     
     return (
-        <Switch>
-            <Route exact path="/" component={Feed}/>
-            <Route exact path="/users" component={Users}/>
-            <Route exact path="/users/:id" component={Profile}/>
-            <Route exact path="/new-post" component={CreatePost}/>
-            <Route exact path="/new-user" component={CreateUser}/>
-            <Route exact path="login" component={Login}/>
-            <Route path="" component={NotFound}/>
-        </Switch>
+        <>
+            <p>Your username: {loginContext.username}</p>
+            <p>Your password: {loginContext.password}</p>
+            <Switch>
+                <Route exact path="/" component={Feed}/>
+                <Route exact path="/users" component={Users}/>
+                <Route exact path="/users/:id" component={Profile}/>
+                <Route exact path="/new-post" component={CreatePost}/>
+                <Route exact path="/new-user" component={CreateUser}/>
+                <Route exact path="/login" component={Login}/>
+                <Route path="" component={NotFound}/>
+            </Switch>
+        </>
     );
 }
 

@@ -28,12 +28,14 @@ namespace MyFace.Services
             }
             catch (InvalidOperationException)
             {
+
                 return false;
+
             }
 
             string hashed = PasswordHelper.CreateHashValue(
                 password,
-                System.Text.Encoding.UTF8.GetBytes(user.Salt)
+                Convert.FromBase64String(user.Salt)
             );
 
             if (hashed != user.HashedPassword)

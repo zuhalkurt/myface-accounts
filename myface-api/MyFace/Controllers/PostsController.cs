@@ -53,18 +53,12 @@ namespace MyFace.Controllers
                 return BadRequest(ModelState);
             }
 
-            var authHeaderSplit = authorization.Split(' ');
-            var authType = authHeaderSplit[0];
-            var encodedUsernamePassword = authHeaderSplit[1];
+            var authHeader = Request.Headers["Authorization"];
+            var password = PasswordHelper.GetPasswordFromHeader(authHeader);
 
-            var usernamePassword = System.Text.Encoding.UTF8.GetString(
-                Convert.FromBase64String(encodedUsernamePassword)
-            );
+            var username = PasswordHelper.GetUsernameFromHeader(authHeader);
 
-            var usernamePasswordArray = usernamePassword.Split(':');
 
-            var username = usernamePasswordArray[0];
-            var password = usernamePasswordArray[1];
 
             if (!_authService.IsValidUsernameAndPassword(username, password))
             {

@@ -12,12 +12,14 @@ import { CreateUser } from '../Pages/CreateUser/CreateUser';
 import { PostList } from '../Components/PostList/PostList';
 
 
+
 function Routes(): ReactElement {
     const loginContext = useContext(LoginContext);
     
     if (!loginContext.isLoggedIn) {
         return <Login/>
     }
+   
     
     return (
         <Switch>

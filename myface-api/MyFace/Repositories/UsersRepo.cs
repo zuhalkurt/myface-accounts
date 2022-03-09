@@ -97,8 +97,6 @@ namespace MyFace.Repositories
             user.LastName = update.LastName;
             user.Username = update.Username;
             user.Email = update.Email;
-            // user.HashedPassword  = "HashedPassword";
-            // user.Salt  = "Salt";
             user.ProfileImageUrl = update.ProfileImageUrl;
             user.CoverImageUrl = update.CoverImageUrl;
 

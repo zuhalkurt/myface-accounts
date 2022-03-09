@@ -2,6 +2,7 @@
 import {Page} from "../Page/Page";
 import {LoginContext} from "../../Components/LoginManager/LoginManager";
 import "./Login.scss";
+import {Feed} from "../Feed/Feed";
 
 export function Login(): JSX.Element {
     const loginContext = useContext(LoginContext);

@@ -2,12 +2,18 @@ using MyFace.Repositories;
 using MyFace.Models.Database;
 using System;
 using MyFace.Helpers;
+using MyFace.Models.Response;
+using Microsoft.Extensions.Primitives;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Http;
+
+
 
 namespace MyFace.Services
 {
     public interface IAuthService
     {
-        bool IsValidUsernameAndPassword(string username, string password);
+        public bool IsValidUsernameAndPassword(string username, string password);
     }
 
     public class AuthService : IAuthService

@@ -55,10 +55,7 @@ namespace MyFace.Controllers
 
             var authHeader = Request.Headers["Authorization"];
             var password = PasswordHelper.GetPasswordFromHeader(authHeader);
-
             var username = PasswordHelper.GetUsernameFromHeader(authHeader);
-
-
 
             if (!_authService.IsValidUsernameAndPassword(username, password))
             {
@@ -90,7 +87,32 @@ namespace MyFace.Controllers
                 return BadRequest(ModelState);
             }
 
-            var post = _posts.Update(id, update);
+            var authHeader = Request.Headers["Authorization"];
+            var password = PasswordHelper.GetPasswordFromHeader(authHeader);
+            var username = PasswordHelper.GetUsernameFromHeader(authHeader);
+
+            
+
+            if (!_authService.IsValidUsernameAndPassword(username, password))
+            {
+                Console.WriteLine(password);
+                Console.WriteLine(username);
+                return Unauthorized("The username and password are not valid");
+            }
+            
+            User user = _users.GetByUsername(username);
+            Post currentPost = _posts.GetById(id);
+            
+            if (user.Id != currentPost.UserId)
+            {
+               
+                return StatusCode(
+                    StatusCodes.Status403Forbidden,
+                    "You are not allowed to update a post for a different user"
+                );
+            }
+
+           var post = _posts.Update(id, update);
             return new PostResponse(post);
         }
 

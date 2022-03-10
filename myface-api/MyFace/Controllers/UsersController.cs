@@ -74,11 +74,11 @@ namespace MyFace.Controllers
 
             User currentUser = _users.GetByUsername(username);
 
-            if (user.Id != user.Id)
+            if (id != currentUser.Id)
             {
                 return StatusCode(
                     StatusCodes.Status403Forbidden,
-                    "You are not allowed to create a post for a different user"
+                    "You are not allowed to update a profile for a different user"
                 );
             }
 

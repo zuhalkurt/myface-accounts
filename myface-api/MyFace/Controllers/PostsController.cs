@@ -119,6 +119,31 @@ namespace MyFace.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
+
+            var authHeader = Request.Headers["Authorization"];
+            var password = PasswordHelper.GetPasswordFromHeader(authHeader);
+            var username = PasswordHelper.GetUsernameFromHeader(authHeader);
+
+            
+
+            if (!_authService.IsValidUsernameAndPassword(username, password))
+            {
+                
+                return Unauthorized("The username and password are not valid");
+            }
+            
+            User user = _users.GetByUsername(username);
+            Post currentPost = _posts.GetById(id);
+            
+            if (user.Id != currentPost.UserId)
+            {
+               
+                return StatusCode(
+                    StatusCodes.Status403Forbidden,
+                    "You are not allowed to delete a post for a different user"
+                );
+            }
+
             _posts.Delete(id);
             return Ok();
         }

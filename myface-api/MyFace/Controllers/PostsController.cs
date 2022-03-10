@@ -72,7 +72,7 @@ namespace MyFace.Controllers
                 );
             }
 
-            var post = _posts.Create(newPost);
+            var post = _posts.Create(newPost, user.Id);
 
             var url = Url.Action("GetById", new { id = post.Id });
             var postResponse = new PostResponse(post);

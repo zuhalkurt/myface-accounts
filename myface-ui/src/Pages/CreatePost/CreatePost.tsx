@@ -25,7 +25,8 @@ export function CreatePostForm(): JSX.Element {
         )
             .then(() => setStatus("FINISHED"))
             .catch(() => {
-                logOut();
+                alert("You cannot add post for another user!");
+                // logOut();
                 setStatus("ERROR")
             });
     }

@@ -1,7 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyFace.Models.Request;
 using MyFace.Models.Response;
+using MyFace.Models.Database;
+using MyFace.Helpers;
 using MyFace.Repositories;
+using Microsoft.Extensions.Primitives;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System;
+using Microsoft.AspNetCore.Http;
+using MyFace.Services;
 
 namespace MyFace.Controllers
 {
@@ -9,10 +16,12 @@ namespace MyFace.Controllers
     [Route("/users")]
     public class UsersController : ControllerBase
     {
+         private readonly IAuthService _authService;
         private readonly IUsersRepo _users;
 
-        public UsersController(IUsersRepo users)
+        public UsersController(IUsersRepo users, IAuthService authService)
         {
+            _authService = authService;
             _users = users;
         }
         
@@ -52,6 +61,25 @@ namespace MyFace.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            var authHeader = Request.Headers["Authorization"];
+            var password = PasswordHelper.GetPasswordFromHeader(authHeader);
+            var username = PasswordHelper.GetUsernameFromHeader(authHeader);
+
+            if (!_authService.IsValidUsernameAndPassword(username, password))
+            {
+                return Unauthorized("The username and password are not valid");
+            }
+
+            User currentUser = _users.GetByUsername(username);
+
+            if (user.Id != user.Id)
+            {
+                return StatusCode(
+                    StatusCodes.Status403Forbidden,
+                    "You are not allowed to create a post for a different user"
+                );
             }
 
             var user = _users.Update(id, update);

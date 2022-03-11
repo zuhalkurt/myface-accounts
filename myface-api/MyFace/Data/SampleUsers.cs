@@ -120,6 +120,7 @@ namespace MyFace.Data
             return Enumerable.Range(0, NumberOfUsers).Select(CreateRandomUser);
         }
 
+
         private static User CreateRandomUser(int index)
         {
             string everybodysPassword = "password123";
@@ -145,6 +146,7 @@ namespace MyFace.Data
                 FirstName = Data[index][0],
                 LastName = Data[index][1],
                 Username = Data[index][2],
+                Role = RoleGenerator.GetRandomRole(),
                 Email = Data[index][3],
                 HashedPassword = hashed,
                 Salt = saltString,

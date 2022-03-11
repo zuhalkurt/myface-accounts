@@ -14,6 +14,7 @@ namespace MyFace.Models.Response
         public int Id => _user.Id;
         public string FirstName => _user.FirstName;
         public string LastName => _user.LastName;
+        public string Role => _user.Role;
         public string DisplayName => $"{FirstName} {LastName}";
         public string Username => _user.Username;
         public string Email => _user.Email;

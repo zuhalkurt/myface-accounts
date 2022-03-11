@@ -21,6 +21,7 @@ export function Profile(): JSX.Element {
             <div className="activity">
                 <PostList title="Posts" fetchPosts={() => fetchPostsForUser(1, 12, id)}/>
                 <PostList title="Likes" fetchPosts={() => fetchPostsLikedBy(1, 12, id)}/>
+                <button type="button">Delete Post</button>
                 <PostList title="Dislikes" fetchPosts={() => fetchPostsDislikedBy(1, 12, id)}/>
             </div>
         </Page>

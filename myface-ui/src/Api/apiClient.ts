@@ -110,3 +110,9 @@ export async function createUser(newUser: NewUser) {
         throw new Error(await response.json())
     }
 }
+
+export async function deletePost(id: string | number) {
+    const response =  await fetch(`https://localhost:5001/posts?id=${id}`,{
+    method: "DELETE"});
+    return await response.json();
+}

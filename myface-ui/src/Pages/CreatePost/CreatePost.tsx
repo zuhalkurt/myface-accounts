@@ -50,11 +50,6 @@ export function CreatePostForm(): JSX.Element {
                 <input className="form-input" value={imageUrl} onChange={event => setImageUrl(event.target.value)}/>
             </label>
 
-            <label className="form-label">
-                User ID
-                <input className="form-input" value={userId} onChange={event => setUserId(event.target.value)}/>
-            </label>
-
             <button className="submit-button" disabled={status === "SUBMITTING"} type="submit">Create Post</button>
             {status === "ERROR" && <p>Something went wrong! Please try again.</p>}
         </form>

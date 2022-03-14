@@ -20,7 +20,12 @@ export function PostList(props: PostListProps): JSX.Element {
         <section>
             <h2>{props.title}</h2>
             <Grid>
-                {posts.map(post => <PostCard key={post.id} post={post}/>)}
+                {posts.map(post => <>
+                <PostCard key={post.id} post={post} />
+                    <button type="button" >
+                        Delete Post
+                    </button>
+                </>)}
             </Grid>
         </section>
     );
